@@ -1,0 +1,15 @@
+A:\TOWARDS FINAL WORK FLOW\Steps part 2\part 1\
+├── run_pipeline.py
+├── step1_patching.py
+├── step2_classification.py
+├── step3_ndvi.py
+├── step4_inference.py
+├── step5_visualization.py
+
+├── new data\
+│   └── big images\
+│       ├── Rgb.tif
+│       └── Nir.tif
+└── weights\
+    ├── multimodal_ae_epoch_15.pth
+    └── field_model_pytorch.pth
