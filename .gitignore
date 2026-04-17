@@ -1,0 +1,13 @@
+# Ignore the massive data folders
+Classificatoin/field/
+Classification/non_field/
+*.tif
+*.jpg
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+pipeline_workspace/
+
+new data/
