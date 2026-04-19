@@ -1,0 +1,11 @@
+{
+    "rgb_image": "new data/big images/Rgb.tif",
+    "nir_image": "new data/big images/Nir.tif",
+    "preloaded_patches": 0,
+    "step1_max_patches": 0,
+    "step2_max_patches": 0,
+    "step3_max_patches": 0,
+    "step4_max_patches": 0,
+    "step5_max_rows": 0,
+    "step5_max_cols": 0
+}
