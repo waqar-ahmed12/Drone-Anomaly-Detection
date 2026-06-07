@@ -34,8 +34,5 @@ $$NDVI = \frac{NIR - Red}{NIR + Red}$$
 ###  Working Video Demonstration
 To see this multi-spectral alignment, patch extraction, and localized anomaly detection system executing in real-time, watch the pipeline walkthrough below:
 
- **[Click Here to Watch the Project Video Demonstration](
-
 https://github.com/user-attachments/assets/ac0bbda8-34f4-425f-bd3e-8d3b669cc41d
 
-)**
