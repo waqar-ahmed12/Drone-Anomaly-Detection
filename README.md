@@ -1,38 +1,56 @@
-## 🔒 Data Ownership & Availability Disclaimer
+Processing Pipeline & System Architecture
+The core objective of this pipeline is to ingest high-resolution aerial imagery, preprocess multi-spectral bands, and utilize an unsupervised deep learning approach to isolate crop anomalies (such as disease stress or phenotypic variations) without requiring massive labeled datasets.
 
-The proprietary dataset (including multispectral imagery and field data) used to train and validate this system belongs to the **National University of Sciences and Technology (NUST)** and its associated research labs. Due to institutional confidentiality agreements and academic data ownership, the raw dataset cannot be publicly distributed or open-sourced in this repository.
+Dataset Specifications
+Source: National Agricultural Research Centre (NARC)
 
-### What is Showcased in this Repository:
-Even though the core dataset is private, this repository serves as a complete showcase of the engineering and development framework:
-* 🛠️ **Complete End-to-End Pipeline:** Full implementation of the AI pipelines, pre-processing scripts, and model architectures.
-* 🤖 **Model Training & Deployment Code:** Transparent training workflows (PyTorch/TensorFlow) and edge deployment configurations.
-* ⚙️ **System Architecture:** Detailed documentation of hardware integration, multispectral alignment, and automated processing pipelines.
+Target Crop: Mungbean
 
----
+Temporal Depth: 13 days of continuous multi-spectral flight data
 
-## 🚀 System Architecture & Working Demonstration
+Sensor Modalities: Co-registered RGB (Visible) and NIR (Near-Infrared) imagery
 
-To demonstrate the full functionality and real-world execution of the project without exposing the proprietary dataset, the workflow and system performance are detailed below:
+The End-to-End Workflow
+[ Raw Drone Imagery ] 
+         │
+         ▼
+ 1. Image Stitching (Microsoft ICE)
+         │
+         ▼
+ 2. Manual Spatial Alignment (QGIS)
+         │
+         ▼
+ 3. Grid-Based Patch Chunking (Python Script)
+         │
+         ▼
+ 4. Feature Engineering: NDVI Extraction ───► $NDVI = \frac{NIR - Red}{NIR + Red}$
+         │
+         ▼
+ 5. Dual-Channel Convolutional Autoencoder
+         │
+         ▼
+[ Anomaly Detection via Reconstruction Error Evaluation ]
+Phase 1: Pipeline Preprocessing
+Image Stitching: Raw aerial captures from drone flights were compiled and stitched together using Microsoft ICE (Image Composite Editor) to generate cohesive, high-resolution orthomosaics for each flight day.
 
-### 1. Processing Pipeline & Workflow
-Below is the end-to-end system architecture detailing how the UAV flight paths, multispectral imagery alignment, and deep learning models interact to produce actionable insights:
+Multi-Spectral Band Alignment: To correct lens distortions and spatial offsets between separate camera sensors, the RGB and NIR orthomosaics were manually aligned and co-registered within QGIS, ensuring perfect pixel-to-pixel correspondence across bands.
 
-![System Architecture]<img width="1557" height="808" alt="cover-image" src="https://github.com/user-attachments/assets/443bde0c-d953-40c1-a4e1-f1506c01d8be" />
+Phase 2: Core Engineering & Feature Extraction
+Grid-Based Patch Chunking: High-resolution orthomosaics are computationally too massive for deep networks to process directly. Custom Python scripts were written to slice the massive imagery into manageable, uniform patches (chunks) optimized for GPU memory boundaries.
 
-https://github.com/user-attachments/assets/567a9ba2-8aba-438b-981c-6d0cff12a8ac
+Vegetation Index Calculation: Leveraging the aligned NIR and Red bands, the Normalized Difference Vegetation Index (NDVI) was engineered to isolate plant vigor and chlorophyll activity using the mathematical formula:
 
+NDVI = \frac{NIR+Red}{NIR−Red}
+​
+ 
+Phase 3: Unsupervised Deep Learning Pipeline
+Convolutional Autoencoder Training: The chunked RGB and engineered NDVI data layers were fed simultaneously into a deep Convolutional Autoencoder. The network was trained to compress these inputs into a low-dimensional bottleneck layer and then reconstruct them back to their original states.
 
+Reconstruction-Based Anomaly Detection: * The Logic: The autoencoder learns to perfectly reconstruct normal, healthy crop patterns.
 
-https://github.com/user-attachments/assets/e75490c0-94a9-4dc5-8d73-0bdeac98f114
+The Catch: When the model encounters a patch containing anomalies (e.g., localized crop disease, weeds, or structural damage), it fails to reconstruct it accurately.
 
+The Result: By calculating the mathematical variance (Mean Squared Error) between the original patch and the regenerated patch, high reconstruction errors automatically flag and isolate spatial anomalies across the field.
 
-
-
-
-### 2. Application Dashboard & Live Execution
-The user interface processes the data through the AI pipeline seamlessly, providing real-time visualization of anomalies and crop health metrics:
-
-![Application Interface](path/to/your/image_4bf5a1.png)<img width="1557" height="808" alt="cover-image" src="https://github.com/user-attachments/assets/1ebecfe6-8293-4632-bc31-7d6cf2a6d014" />
-
-
-
+Working Video Demonstration
+To see this multi-spectral alignment, patch extraction, and localized anomaly detection system executing in real-time, watch the pipeline walkthrough below:
